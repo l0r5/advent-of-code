@@ -6,16 +6,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Day1 {
-
-    public int getResult() {
+    public String getResult() {
         List<Integer> inputNumbers = readNumbers();
         List<Integer> pair = calcPair(inputNumbers);
-        int finalResult = calcFinalResult(pair);
+        List<Integer> triple = calcTriple(inputNumbers);
+        int finalResultPair = calcFinalResult(pair);
+        int finalResultTriple = calcFinalResult(triple);
         System.out.println("Pair: " + pair.get(0) + ", " + pair.get(1));
-        System.out.println("Day 1 Final Result: " + finalResult);
-        return finalResult;
+        System.out.println("Triple: " + triple.get(0) + ", " + triple.get(1) + ", " + triple.get(2));
+        System.out.println("Day 1 Final Result - Pairs:" + finalResultPair + ", " + finalResultTriple);
+        return finalResultPair + "," + finalResultTriple;
     }
 
     protected List<Integer> readNumbers() {
@@ -36,7 +39,8 @@ public class Day1 {
         return inputNumbers;
     }
 
-    protected List<Integer> calcPair(List<Integer> allNumbers) {
+    protected List<Integer> calcPair(List<Integer> allNumbersInput) {
+        List<Integer> allNumbers = new ArrayList<>(allNumbersInput);
         List<Integer> pair = new ArrayList<>();
         Iterator<Integer> i = allNumbers.iterator();
         while (i.hasNext()) {
@@ -52,11 +56,33 @@ public class Day1 {
         return pair;
     }
 
-    protected int calcFinalResult(List<Integer> pair) {
-        if(pair.size() != 2) {
-            System.out.println("Received more than one pair: " + pair.toString());
-            return 0;
+    protected List<Integer> calcTriple(List<Integer> allNumbersInput) {
+        List<Integer> allNumbers = new ArrayList<>(allNumbersInput);
+        List<Integer> triple = new ArrayList<>();
+        Iterator<Integer> i = allNumbers.iterator();
+        while (i.hasNext()) {
+            Integer number = i.next();
+            i.remove();
+            int searchNumber = 2020 - number;
+            allNumbers.forEach(num -> {
+                int searchNum = searchNumber - num;
+                if (searchNum <= 0) return;
+                if (allNumbers.contains(searchNumber)) {
+                    triple.add(number);
+                    triple.add(num);
+                    triple.add(searchNum);
+                    System.out.println("Found a triple: " + number + ", " + num + ", " + searchNum);
+                }
+            });
         }
-        return pair.get(0) * pair.get(1);
+        return triple;
+    }
+
+    protected int calcFinalResult(List<Integer> tuple) {
+        if (tuple.size() < 2 || tuple.size() > 3) {
+            System.out.println("Didn't receive a pair or tuple: " + tuple.toString());
+            return -1;
+        }
+        return tuple.stream().reduce(1, (a, b) -> a * b);
     }
 }

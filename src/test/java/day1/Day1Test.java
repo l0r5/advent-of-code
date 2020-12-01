@@ -33,13 +33,23 @@ class Day1Test {
     }
 
     @Test
-    void testCalcFinalResult_moreThanOnePair() {
+    void testCalcTriple_deliversTriple() {
         List<Integer> data = day1.readNumbers();
-        List<Integer> pair = day1.calcPair(data);
-        pair.add(3);
-        assertFalse(pair.isEmpty());
-        assertEquals(3, pair.size());
-        assertEquals(0, day1.calcFinalResult(pair));
+        List<Integer> triple = day1.calcTriple(data);
+        assertFalse(triple.isEmpty());
+        assertEquals(3, triple.size());
+        assertEquals(2020, triple.get(0) + triple.get(1) + triple.get(2));
+    }
+
+    @Test
+    void testCalcFinalResult_moreThanOnePairOrTuple() {
+        List<Integer> data = day1.readNumbers();
+        List<Integer> tuple = day1.calcPair(data);
+        tuple.add(3);
+        tuple.add(3);
+        assertFalse(tuple.isEmpty());
+        assertEquals(4, tuple.size());
+        assertEquals(-1, day1.calcFinalResult(tuple));
     }
 
     @Test
@@ -53,9 +63,21 @@ class Day1Test {
     }
 
     @Test
+    void testCalcFinalResult_exactlyOneTriple() {
+        List<Integer> triple  = new ArrayList<>();
+        triple.add(1000);
+        triple.add(1000);
+        triple.add(20);
+        assertFalse(triple.isEmpty());
+        assertEquals(3, triple.size());
+        assertEquals(20000000, day1.calcFinalResult(triple));
+    }
+
+    @Test
     void testGetResultDay1_successful() {
-        int result = day1.getResult();
-        assert(result != 0);
-        assertEquals(858496, day1.getResult());
+        String result = day1.getResult();
+        assertNotNull(result);
+        assertNotEquals("", result);
+        assertEquals("858496,98721392", result);
     }
 }
