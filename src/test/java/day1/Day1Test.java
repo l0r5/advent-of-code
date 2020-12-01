@@ -78,6 +78,6 @@ class Day1Test {
         String result = day1.getResult();
         assertNotNull(result);
         assertNotEquals("", result);
-        assertEquals("858496,98721392", result);
+        assertEquals("858496,263819430", result);
     }
 }

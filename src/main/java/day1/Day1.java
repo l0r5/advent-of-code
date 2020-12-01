@@ -46,11 +46,11 @@ public class Day1 {
         while (i.hasNext()) {
             Integer number = i.next();
             i.remove();
-            int searchNumber = 2020 - number;
-            if (allNumbers.contains(searchNumber)) {
+            int difference = 2020 - number;
+            if (allNumbers.contains(difference)) {
                 pair.add(number);
-                pair.add(searchNumber);
-                System.out.println("Found a pair: " + number + ", " + searchNumber);
+                pair.add(difference);
+                System.out.println("Found a pair: " + number + ", " + difference);
             }
         }
         return pair;
@@ -63,15 +63,16 @@ public class Day1 {
         while (i.hasNext()) {
             Integer number = i.next();
             i.remove();
-            int searchNumber = 2020 - number;
+            int difference = 2020 - number;
             allNumbers.forEach(num -> {
-                int searchNum = searchNumber - num;
-                if (searchNum <= 0) return;
-                if (allNumbers.contains(searchNumber)) {
+                int diff = difference - num;
+                if (diff <= 0) return;
+                if (allNumbers.contains(diff)) {
+                    if(triple.contains(number) || triple.contains(num) || triple.contains(diff)) return;
                     triple.add(number);
                     triple.add(num);
-                    triple.add(searchNum);
-                    System.out.println("Found a triple: " + number + ", " + num + ", " + searchNum);
+                    triple.add(diff);
+                    System.out.println("Found a triple: " + number + ", " + num + ", " + diff);
                 }
             });
         }
