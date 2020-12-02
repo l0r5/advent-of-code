@@ -24,7 +24,7 @@ public class Day1 {
     protected List<Integer> readNumbers() {
         List<Integer> inputNumbers = new ArrayList<>();
         try {
-            File myObj = new File("/home/lars/dev/advent-of-code/src/main/resources/day1_expense_report.txt");
+            File myObj = new File("src/main/resources/day1_expense_report.txt");
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 int data = myReader.nextInt();
