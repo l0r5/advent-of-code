@@ -140,8 +140,51 @@ class Day4Test {
     void testIsPassValidStrict_invalidPassport() {
         String testPass = "eyr:1972 cid:100 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926";
         assertFalse(day4.isPassValidStrict(day4.createPass(testPass)));
-        testPass = "iyr:2019 hcl:#602927 eyr:1967 hgt:170cm ecl:grn pid:012533040 byr:1946";
-        assertFalse(day4.isPassValidStrict(day4.createPass(testPass)));
+    }
 
+    @Test
+    void testCountValidStrictPasses_onlyInvalidPasses() {
+        List<String> unformattedPassList = new ArrayList<>();
+        unformattedPassList.add("eyr:1972 cid:100");
+        unformattedPassList.add("hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926");
+        unformattedPassList.add("");
+        unformattedPassList.add("iyr:2019");
+        unformattedPassList.add("hcl:#602927 eyr:1967 hgt:170cm");
+        unformattedPassList.add("ecl:grn pid:012533040 byr:1946");
+        unformattedPassList.add("");
+        unformattedPassList.add("hcl:dab227 iyr:2012");
+        unformattedPassList.add("ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277");
+        unformattedPassList.add("");
+        unformattedPassList.add("hgt:59cm ecl:zzz");
+        unformattedPassList.add("eyr:2038 hcl:74454a iyr:2023");
+        unformattedPassList.add("pid:3556412378 byr:2007");
+        int result = day4.countValidPassesStrict(day4.producePassResultList(day4.formatPassList(unformattedPassList)));
+        assertEquals(0, result);
+    }
+
+    @Test
+    void testCountValidStrictPasses_onlyValidPasses() {
+        List<String> unformattedPassList = new ArrayList<>();
+        unformattedPassList.add("pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980");
+        unformattedPassList.add("hcl:#623a2f");
+        unformattedPassList.add("");
+        unformattedPassList.add("eyr:2029 ecl:blu cid:129 byr:1989");
+        unformattedPassList.add("iyr:2014 pid:896056539 hcl:#a97842 hgt:165cm");
+        unformattedPassList.add("");
+        unformattedPassList.add("hcl:#888785");
+        unformattedPassList.add("hgt:164cm byr:2001 iyr:2015 cid:88");
+        unformattedPassList.add("pid:545766238 ecl:hzl");
+        unformattedPassList.add("eyr:2022");
+        unformattedPassList.add("");
+        unformattedPassList.add("iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719");
+        int result = day4.countValidPassesStrict(day4.producePassResultList(day4.formatPassList(unformattedPassList)));
+        assertEquals(4, result);
+    }
+
+    @Test
+    void testCountValidStrictPasses_numberOfValidPassesRealData() {
+        List<String> data = day4.readFile();
+        int result = day4.countValidPassesStrict(day4.producePassResultList(day4.formatPassList(data)));
+        assertEquals(172, result);
     }
 }

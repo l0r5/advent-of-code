@@ -92,7 +92,7 @@ public class Day4 {
     protected boolean isPassValidStrict(Map<String, String> inputTestPass) {
         if (inputTestPass.size() < 7) return false;
         if (inputTestPass.size() == 7) {
-            return inputTestPass.get("cid") == null;
+            if (!(inputTestPass.get("cid") == null)) return false;
         }
         for (Map.Entry<String, String> entry : inputTestPass.entrySet()) {
             if (!entry.getKey().equals("cid") && (entry.getKey().isEmpty() || entry.getValue().isEmpty())) {
@@ -112,19 +112,24 @@ public class Day4 {
                         return false;
                     break;
                 case "hgt":
-                    if (!entry.getValue().contains("cm") || !entry.getValue().contains("in"))
+                    if (!(entry.getValue().contains("cm") || entry.getValue().contains("in")))
                         return false;
-                    if (entry.getValue().contains("cm") && (Integer.parseInt(entry.getValue()) < 150 || Integer.parseInt(entry.getValue()) > 193))
-                        return false;
-                    if (entry.getValue().contains("in") && (Integer.parseInt(entry.getValue()) < 59 || Integer.parseInt(entry.getValue()) > 76))
-                        return false;
+                    if (entry.getValue().contains("cm")) {
+                        int num = Integer.parseInt(entry.getValue().replace("cm", ""));
+                        if (num < 150 || num > 193) return false;
+                    }
+                    if (entry.getValue().contains("in")) {
+                        int num = Integer.parseInt(entry.getValue().replace("in", ""));
+                        if(num < 59 || num > 76) return false;
+                    }
                     break;
                 case "hcl":
                     if (!entry.getValue().startsWith("#")) return false;
                     if (entry.getValue().length() != 7) return false;
-                    boolean valid = true;
+                    boolean valid;
                     for (char c : entry.getValue().toCharArray()) {
-                        valid = ((c >= 'a') && (c <= 'f')) ||
+                        valid = ((c == '#')) ||
+                                ((c >= 'a') && (c <= 'f')) ||
                                 ((c >= '0') && (c <= '9'));
                         if (!valid) {
                             return false;
@@ -132,10 +137,23 @@ public class Day4 {
                     }
                     break;
                 case "ecl":
-                    if (!entry.getValue().contains("amb") || !entry.getValue().contains("blu") || !entry.getValue().contains("brn") || !entry.getValue().contains("gry") || !entry.getValue().contains("grn") || !entry.getValue().contains("hzl") || !entry.getValue().contains("oth"))
-                        return false;
+                    List<String> allowedValues = new ArrayList<>();
+                    allowedValues.add("amb");
+                    allowedValues.add("blu");
+                    allowedValues.add("brn");
+                    allowedValues.add("gry");
+                    allowedValues.add("grn");
+                    allowedValues.add("hzl");
+                    allowedValues.add("oth");
+                    int hit = 0;
+                    for (String value : allowedValues) {
+                        if (entry.getValue().equals(value)) hit++;
+                    }
+                    if (hit == 0) return false;
+                    break;
                 case "pid":
-                    if (entry.getValue().length() != 9 || entry.getValue().startsWith("0")) return false;
+                    if (entry.getValue().length() != 9)
+                        return false;
             }
         }
         return true;
@@ -145,6 +163,14 @@ public class Day4 {
         int count = 0;
         for (Map<String, String> pass : passResultList) {
             if (isPassValid(pass)) count++;
+        }
+        return count;
+    }
+
+    protected int countValidPassesStrict(List<Map<String, String>> passResultList) {
+        int count = 0;
+        for (Map<String, String> pass : passResultList) {
+            if (isPassValidStrict(pass)) count++;
         }
         return count;
     }
